@@ -22,13 +22,24 @@ class RipeRisStreamer:
         self._report = self._send_message_screen
         self._format = self._format_none
 
-        if(self._options.output == 'socket'):
-            self._sock = s.socket(s.AF_UNIX, s.SOCK_DGRAM)
-            self._sock.connect(self._options.socket_path)
-            self._report = self._send_message_socket
+        if(self._options.output == 'plugin'):
+            plugin = self._loadplugin()
+            self._report = plugin['send_message']
+            self._format = plugin['format']
+        else:
+            if(self._options.output == 'socket'):
+                self._sock = s.socket(s.AF_UNIX, s.SOCK_DGRAM)
+                self._sock.connect(self._options.socket_path)
+                self._report = self._send_message_socket
+    
+            if(self._options.format == 'influx'):
+                self._format = self._format_influx
 
-        if(self._options.format == 'influx'):
-            self._format = self._format_influx
+    def _loadplugin(self):
+        return({
+            'send_message': self._send_message_screen,
+            'format': self._format_influx,
+        })
 
     def _format_influx(self, msg):
         #<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]
