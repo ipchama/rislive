@@ -1,0 +1,11 @@
+version: '3'
+services:
+  riperis:
+    image: "dockerhama/riperis:latest"
+    command: "--format influx --host rrc21"
+    networks:
+      tik_net:
+
+networks:
+  tik_net:
+    driver: bridge
