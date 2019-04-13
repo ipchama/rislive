@@ -56,15 +56,15 @@ optional arguments:
                         Include a Base64-encoded version of the original
                         binary BGP message.
   --output {screen,socket}, -o {screen,socket}
-                        Where to send the data. Currently only "screen" is
-                        supported, which is the default.
+                        Where to send the data. Defaults to stdout.
   --socket-path SOCKET_PATH, -s SOCKET_PATH
                         The filename of the unix dgram on which the consumer
-                        is listening.
+                        is listening. Defaults to /tmp/risdata.sock.
   --format {influx}, -f {influx}
                         Alternate output format.
   --auto-reconnect AUTO_RECONNECT, -ar AUTO_RECONNECT
                         Auto-reconnect if the connection drops or is severed.
+                        Defaults to True.
 ```
 ## Contributing
 
