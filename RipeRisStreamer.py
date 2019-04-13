@@ -7,6 +7,7 @@ import ssl
 import logging
 import socket as s
 import os
+from importlib import import_module
 
 class RipeRisStreamer:
     """A class for streaming updates from the RIPE RIS Live project"""
@@ -36,6 +37,9 @@ class RipeRisStreamer:
                 self._format = self._format_influx
 
     def _loadplugin(self):
+        
+        imported_module = import_module(f"./plugins/test.plugin")
+        
         return({
             'send_message': self._send_message_screen,
             'format': self._format_influx,
