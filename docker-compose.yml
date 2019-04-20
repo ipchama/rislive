@@ -5,6 +5,7 @@ services:
     command: "--format influx --host rrc21"
     volumes:
       - ./plugins:/bin/plugins
+      - ./init:/opt/init
     networks:
       tik_net:
 
