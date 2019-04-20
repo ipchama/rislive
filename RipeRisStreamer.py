@@ -23,7 +23,7 @@ class RipeRisStreamer:
         self._report = self._send_message_screen
         self._format = self._format_none
 
-        if(self._options.output == 'plugin'):
+        if(self._options.output_plugin):
             imported_module = import_module(self._options.output_plugin)            
             plugin = imported_module.Plugin(options)
             
