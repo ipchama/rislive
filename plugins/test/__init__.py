@@ -3,8 +3,9 @@ import json
 class Plugin:
     
     def __init__(self, parent, options):
-        self._init=True
-
+        if options.output_plugin_config_data:
+            self._config = json.loads(options.output_plugin_config_data)
+            
     def send_message(self, msg):
         print(msg)
         
