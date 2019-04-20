@@ -1,6 +1,6 @@
 # RisLive
 
-A python script, and docker image, to start making use of RIPE's new RIS Live prototype service. 
+A python script, and docker image, to start making use of RIPE's new RIS Live prototype service.  Includes an option to provide a plugin for handling the incoming RIS data is available.
 
 ## Getting Started
 
@@ -55,6 +55,9 @@ optional arguments:
   --include-raw INCLUDE_RAW, -r INCLUDE_RAW
                         Include a Base64-encoded version of the original
                         binary BGP message.
+  --output-plugin OUTPUT_PLUGIN, -op OUTPUT_PLUGIN
+                        Load an external plugin to process incoming RIS data.
+                        This will override other output and format options.
   --output {screen,socket}, -o {screen,socket}
                         Where to send the data. Defaults to stdout.
   --socket-path SOCKET_PATH, -s SOCKET_PATH

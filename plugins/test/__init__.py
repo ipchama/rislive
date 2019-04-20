@@ -2,7 +2,7 @@ import json
 
 class Plugin:
     
-    def __init__(self, options):
+    def __init__(self, parent, options):
         self._init=True
 
     def send_message(self, msg):
