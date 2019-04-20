@@ -30,7 +30,7 @@ ripeRisLive.py --more-specific true --host rrc21 --output-plugin plugins.test
 ```
 ## Plugins
 Plugins are just normal python classes.  The easiest way to use one is to create a plugins directory in the same location as the main ripeRisLive script and add in your class directories.
-The repo has a test plugin to be used as an example/boilerplate.  Plugins will be passed the parent RipeRisStream object and the argparse args object containing the original arguments passed to the script.
+The repo has a test plugin to be used as an example/boilerplate.  Plugins will be passed the parent RipeRisStream object and the argparse args object containing the original arguments passed to the script. The --output-plugin-config-data helper option is available to pass in plugin-specific data/configs.
 
 ## Options
 I attempted to provide 1:1 access to all the available filters that the RIS Live service provides: 
@@ -66,6 +66,10 @@ optional arguments:
   --output-plugin OUTPUT_PLUGIN, -op OUTPUT_PLUGIN
                         Load an external plugin to process incoming RIS data.
                         This will override other output and format options.
+  --output-plugin-config-data OUTPUT_PLUGIN_CONFIG_DATA, -opc OUTPUT_PLUGIN_CONFIG_DATA
+                        Config data to be passed to the plugin if --output-
+                        plugin was used. Will be passed as is and format will
+                        depend on the plugin.
   --output {screen,socket}, -o {screen,socket}
                         Where to send the data. Defaults to stdout.
   --socket-path SOCKET_PATH, -s SOCKET_PATH
