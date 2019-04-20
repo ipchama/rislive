@@ -3,6 +3,8 @@ services:
   riperis:
     image: "dockerhama/riperis:latest"
     command: "--format influx --host rrc21"
+    volumes:
+      - ./plugins:/bin/plugins
     networks:
       tik_net:
 
