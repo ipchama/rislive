@@ -24,10 +24,11 @@ class RipeRisStreamer:
         self._format = self._format_none
 
         if(self._options.output == 'plugin'):
-            imported_module = import_module(self._options.output_plugin)
+            imported_module = import_module(self._options.output_plugin)            
+            plugin = imported_module.Plugin(options)
             
-            self._report = imported_module.send_message
-            self._format = imported_module.format
+            self._report = plugin.send_message
+            self._format = plugin.format
           
         else:
             if(self._options.output == 'socket'):
@@ -82,8 +83,9 @@ class RipeRisStreamer:
                 async for message in websocket:
                     try:
                         self._report(self._format(message))
-                    except:
-                        pass               
+                    except Exception as e:
+                        print(str(e))
+                        pass            
                     
         asyncio.get_event_loop().run_until_complete(_start_streaming('wss://ris-live.ripe.net/v1/ws/?client=RipeRisStreamer'))
 

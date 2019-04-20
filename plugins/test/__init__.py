@@ -1,8 +1,13 @@
 import json
 
-def send_message(msg):
-    print(msg)
+class Plugin:
     
-def format(msg):
-    msgobj = json.loads(msg).get('data')
-    return(f"{msgobj['timestamp']} {msgobj['peer']}")
+    def __init__(self, options):
+        self._init=True
+
+    def send_message(self, msg):
+        print(msg)
+        
+    def format(self, msg):
+        msgobj = json.loads(msg).get('data')
+        return(f"{msgobj['timestamp']} {msgobj['peer']}")
