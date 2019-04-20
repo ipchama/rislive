@@ -7,6 +7,7 @@ import ssl
 import logging
 import socket as s
 import os
+from importlib import import_module
 
 class RipeRisStreamer:
     """A class for streaming updates from the RIPE RIS Live project"""
@@ -22,13 +23,21 @@ class RipeRisStreamer:
         self._report = self._send_message_screen
         self._format = self._format_none
 
-        if(self._options.output == 'socket'):
-            self._sock = s.socket(s.AF_UNIX, s.SOCK_DGRAM)
-            self._sock.connect(self._options.socket_path)
-            self._report = self._send_message_socket
-
-        if(self._options.format == 'influx'):
-            self._format = self._format_influx
+        if(self._options.output == 'plugin'):
+            imported_module = import_module(self._options.output_plugin)            
+            plugin = imported_module.Plugin(options)
+            
+            self._report = plugin.send_message
+            self._format = plugin.format
+          
+        else:
+            if(self._options.output == 'socket'):
+                self._sock = s.socket(s.AF_UNIX, s.SOCK_DGRAM)
+                self._sock.connect(self._options.socket_path)
+                self._report = self._send_message_socket
+    
+            if(self._options.format == 'influx'):
+                self._format = self._format_influx
 
     def _format_influx(self, msg):
         #<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]
@@ -74,8 +83,9 @@ class RipeRisStreamer:
                 async for message in websocket:
                     try:
                         self._report(self._format(message))
-                    except:
-                        pass               
+                    except Exception as e:
+                        print(str(e))
+                        pass            
                     
         asyncio.get_event_loop().run_until_complete(_start_streaming('wss://ris-live.ripe.net/v1/ws/?client=RipeRisStreamer'))
 

@@ -53,7 +53,10 @@ def main():
     parser.add_argument('--include-raw','-r', dest='include_raw', default=False, type=bool,
                         help='Include a Base64-encoded version of the original binary BGP message.')
 
-    parser.add_argument('--output','-o', dest='output', default='screen', choices=['screen', 'socket'],
+    parser.add_argument('--output-plugin','-op', dest='output_plugin', default=None, required = True if 'plugin' in sys.argv else False,
+                        help='Where to send the data. Defaults to stdout.')
+
+    parser.add_argument('--output','-o', dest='output', default='screen', choices=['screen', 'socket', 'plugin'],
                         help='Where to send the data. Defaults to stdout.')
     
     parser.add_argument('--socket-path','-s', dest='socket_path', default='/tmp/risdata.sock',
