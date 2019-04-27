@@ -68,7 +68,7 @@ optional arguments:
                         This will override other output and format options.
   --output-plugin-config-data OUTPUT_PLUGIN_CONFIG_DATA, -opc OUTPUT_PLUGIN_CONFIG_DATA
                         Config data to be passed to the plugin if --output-
-                        plugin was used. Will be passed as is and format will
+                        plugin was used. Will be passed as-is and format will
                         depend on the plugin.
   --output {screen,socket}, -o {screen,socket}
                         Where to send the data. Defaults to stdout.

@@ -57,7 +57,7 @@ def main():
                         help='Load an external plugin to process incoming RIS data.  This will override other output and format options.')
 
     parser.add_argument('--output-plugin-config-data','-opc', dest='output_plugin_config_data', default=None,
-                        help='Config data to be passed to the plugin if --output-plugin was used.  Will be passed as is and format will depend on the plugin.')
+                        help='Config data to be passed to the plugin if --output-plugin was used.  Will be passed as-is and format will depend on the plugin.')
 
     parser.add_argument('--output','-o', dest='output', default='screen', choices=['screen', 'socket'],
                         help='Where to send the data. Defaults to stdout.')
