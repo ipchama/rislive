@@ -59,15 +59,6 @@ def main():
     parser.add_argument('--output-plugin-config-data','-opc', dest='output_plugin_config_data', default=None,
                         help='Config data to be passed to the plugin if --output-plugin was used.  Will be passed as-is and format will depend on the plugin.')
 
-    parser.add_argument('--output','-o', dest='output', default='screen', choices=['screen', 'socket'],
-                        help='Where to send the data. Defaults to stdout.')
-    
-    parser.add_argument('--socket-path','-s', dest='socket_path', default='/tmp/risdata.sock',
-                        help='The filename of the unix dgram on which the consumer is listening. Defaults to /tmp/risdata.sock.')
-
-    parser.add_argument('--format','-f', dest='format', default=None, choices=["influx"],
-                        help='Alternate output format.')
-
     parser.add_argument('--auto-reconnect','-ar', dest='auto_reconnect', default=True, type=bool,
                         help='Auto-reconnect if the connection drops or is severed. Defaults to True.')
                         
