@@ -5,7 +5,6 @@ import websockets
 import json
 import ssl
 import logging
-import socket as s
 import os
 from importlib import import_module
 
@@ -29,42 +28,12 @@ class RipeRisStreamer:
             
             self._report = plugin.send_message
             self._format = plugin.format
-          
-        else:
-            if(self._options.output == 'socket'):
-                self._sock = s.socket(s.AF_UNIX, s.SOCK_DGRAM)
-                self._sock.connect(self._options.socket_path)
-                self._report = self._send_message_socket
-    
-            if(self._options.format == 'influx'):
-                self._format = self._format_influx
 
-    def _format_influx(self, msg):
-        #<measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]
-        msgobj = json.loads(msg).get('data')
-        msgobj['timestamp'] = int(msgobj['timestamp']) * 1000000000
-        if 'announcements' in msgobj:            
-            msg = ""
-            for ann in msgobj['announcements']:
-                for prefix in ann['prefixes']:
-                    msg = msg + f"riperis,host={msgobj['host']},prefix={prefix},peer={msgobj['peer']},peer_asn={msgobj['peer_asn']},ris_id={msgobj['id']},type={msgobj['type']},origin={msgobj.get('origin', 'unk')} prefix_count=1 {msgobj['timestamp']}\n"
-            return(msg)
-        else:
-            msgobj['announcement_count'] = 0
-            return(f"riperis,host={msgobj['host']},peer={msgobj['peer']},peer_asn={msgobj['peer_asn']},ris_id={msgobj['id']},type={msgobj['type']},origin={msgobj.get('origin', 'unk')} prefix_count=0,event_count=1 {msgobj['timestamp']}")
-  
     def _format_none(self, msg):
         return(msg)
     
     def _send_message_screen(self, msg):
         print(msg)
-
-    def _send_message_socket(self, msg):
-        try:
-            self._sock.send(msg.encode())
-        except BaseException as e:
-            print(str(e))
-            pass
 
     def disconnect(self):
         self._ws.close()
