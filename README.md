@@ -4,7 +4,7 @@ A python script, and docker image, to start making use of RIPE's new RIS Live pr
 
 ## Getting Started
 
-Just download and run, or feel free to grab the docker image at https://cloud.docker.com/repository/docker/dockerhama/riperis
+Just download and run, or feel free to grab the docker image at https://hub.docker.com/r/dockerhama/riperis
 
 If you've already got docker and docker-compose installed, then `docker-compose -f docker-compose.yml up` will take care of the rest.
 
@@ -14,19 +14,15 @@ Python 3.7
 See requirements.txt ( or just pip it :p )
 
 ## Examples
-Writing to a unix domain socket for streaming to influxdb via telegraf:
-```
-ripeRisLive.py --host rrc21 -o socket -s /etc/telegraf/risdata.sock --format influx
-```
 
 Sending the RIPE RIS Live feeds straight to stdout:
 ```
 ripeRisLive.py --host rrc21
 ```
 
-Sending the RIPE RIS Live feeds output through a custom plugin:
+Sending the RIPE RIS Live feeds output to a domain socket:
 ```
-ripeRisLive.py --more-specific true --host rrc21 --output-plugin plugins.test
+ripeRisLive.py --more-specific true --host rrc21 --output-plugin plugins.socket --output-plugin-config-data '{"socket-path": "/tmp/some-path.sock"}'
 ```
 ## Plugins
 Plugins are just normal python classes.  The easiest way to use one is to create a plugins directory in the same location as the main ripeRisLive script and add in your class directories.
@@ -70,13 +66,6 @@ optional arguments:
                         Config data to be passed to the plugin if --output-
                         plugin was used. Will be passed as-is and format will
                         depend on the plugin.
-  --output {screen,socket}, -o {screen,socket}
-                        Where to send the data. Defaults to stdout.
-  --socket-path SOCKET_PATH, -s SOCKET_PATH
-                        The filename of the unix dgram on which the consumer
-                        is listening. Defaults to /tmp/risdata.sock.
-  --format {influx}, -f {influx}
-                        Alternate output format.
   --auto-reconnect AUTO_RECONNECT, -ar AUTO_RECONNECT
                         Auto-reconnect if the connection drops or is severed.
                         Defaults to True.
