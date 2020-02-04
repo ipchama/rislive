@@ -2,7 +2,7 @@ version: '3'
 services:
   riperis:
     image: "dockerhama/riperis:latest"
-    command: "--format influx --host rrc21"
+    command: "--plugin plugins.influx --host rrc21"
     volumes:
       - ./plugins:/bin/plugins
       - ./init:/opt/init
