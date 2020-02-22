@@ -1,1 +1,2 @@
 websockets==7.0
+psycopg2==2.8.4
