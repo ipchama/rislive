@@ -31,7 +31,8 @@ CREATE TABLE events (
   time        TIMESTAMPTZ               NOT NULL,
   peer        varchar(255)              NOT NULL,
   peer_asn    int                       NOT NULL,
-  prefix      varchar(255)              NOT NULL,
+  prefix      varchar(255)              ,
+  next_hop    varchar(255)              ,
   id          varchar(255)              NOT NULL,
   type        varchar(255)              NOT NULL,
   origin      varchar(255)              NOT NULL,
@@ -49,17 +50,32 @@ CREATE TABLE events (
     def send_message(self, msg):
 
         try:
-            msgobj = json.loads(msg).get('data')        
-            self._cursor.execute("INSERT INTO events (time, peer, peer_asn, prefix, id, type, origin, event_count) VALUES (TO_TIMESTAMP(%s), %s, %s, %s, %s, %s, %s, 1)", [
-                    msgobj['timestamp'],
-                    msgobj['peer'],
-                    msgobj['peer_asn'],
-                    msgobj.get('prefix', None),
-                    msgobj['id'],
-                    msgobj['type'],
-                    msgobj.get('origin', 'unk')
-                ])
-            
+            msgobj = json.loads(msg).get('data')
+            announcements = msgobj.get('announcements', False)
+            if announcements:
+                for announcement in announcements:
+                    for prefix in announcement['prefixes']: 
+                        self._cursor.execute("INSERT INTO events (time, peer, peer_asn, prefix, next_hop, id, type, origin, event_count) VALUES (TO_TIMESTAMP(%s), %s, %s, %s, %s, %s, %s, %s, 1)", [
+                                msgobj['timestamp'],
+                                msgobj['peer'],
+                                msgobj['peer_asn'],
+                                prefix,
+                                announcement['next_hop'],
+                                msgobj['id'],
+                                msgobj['type'],
+                                msgobj.get('origin', 'unk')
+                            ])
+            else:
+                    self._cursor.execute("INSERT INTO events (time, peer, peer_asn, id, type, origin, event_count) VALUES (TO_TIMESTAMP(%s), %s, %s, %s, %s, %s, 1)", [
+                            msgobj['timestamp'],
+                            msgobj['peer'],
+                            msgobj['peer_asn'],
+                            msgobj['id'],
+                            msgobj['type'],
+                            msgobj.get('origin', 'unk')
+                        ])
+                
+                
             self._connection.commit()
         except Exception as e:
             print(str(e))
