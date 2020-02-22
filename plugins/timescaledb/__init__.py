@@ -20,8 +20,12 @@ class Plugin:
         
         self._cursor = self._connection.cursor()
         
-        init_items=[
-            "DROP TABLE IF EXISTS events",
+        init_items = []
+        
+        if self._config.get('reset', False):
+            init_items = ["DROP TABLE IF EXISTS events"]
+        
+        init_items.extend([            
             """
 CREATE TABLE events (
   time        TIMESTAMPTZ               NOT NULL,
@@ -34,7 +38,7 @@ CREATE TABLE events (
   event_count      int                  NOT NULL
 );""",
 "SELECT create_hypertable('events', 'time');"
-        ]
+        ])
         
         for init_item in init_items:
             try:
