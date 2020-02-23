@@ -2,12 +2,37 @@ version: '3'
 services:
   riperis:
     image: "dockerhama/riperis:latest"
-    command: "--plugin plugins.influx --host rrc21"
+    command: >
+       --output-plugin plugins.timescaledb --output-plugin-config-data '{"reset": "True", "username": "postgres", "password": "11CHANGE00ME11", "host": "timescaledb", "db": "postgres"}'
     volumes:
-      - ./plugins:/bin/plugins
-      - ./init:/opt/init
+      - /etc/grafana:/etc/grafana
+    depends_on:
+      - timescaledb
     networks:
       tik_net:
+
+  timescaledb:
+    image: "timescale/timescaledb:latest-pg11"
+    ports:
+      - 5432:5432
+    volumes:
+      - /etc/timescaledb/data:/var/lib/postgresql/data
+    environment:
+      - "POSTGRES_PASSWORD=11CHANGE00ME11"
+    networks:
+      tik_net:
+
+  grafana:
+    image: "dockerhama/grafana:ris"
+    ports:
+      - 3000:3000
+    #environment:
+    #  - "GF_SERVER_ROOT_URL=http://HOST_OR_IP!!!"
+    #  - "GF_SECURITY_ADMIN_PASSWORD=11CHANGE00ME11"  # This needs to be changed via the grafana UI after logging into grafana.
+    networks:
+      tik_net:
+    depends_on:
+      - riperis
 
 networks:
   tik_net:
