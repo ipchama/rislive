@@ -28,7 +28,7 @@ services:
       - 3000:3000
     environment:
     #  - "GF_SERVER_ROOT_URL=http://HOST_OR_IP!!!"
-      - "GF_SECURITY_ADMIN_PASSWORD=11CHANGE00ME11"
+    #  - "GF_SECURITY_ADMIN_PASSWORD=11CHANGE00ME11"  # This needs to be changed via the grafana UI after logging into grafana.
     networks:
       tik_net:
     depends_on:
